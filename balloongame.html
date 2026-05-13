@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Balloon Bursting Game</title>
+
+<style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family: Arial, sans-serif;
+    }
+
+    body{
+        overflow:hidden;
+        background: linear-gradient(to bottom, #87CEEB, #ffffff);
+        height:100vh;
+    }
+
+    h1{
+        text-align:center;
+        margin-top:10px;
+        color:#ff1493;
+    }
+
+    #scoreBoard{
+        position:absolute;
+        top:15px;
+        left:20px;
+        font-size:24px;
+        font-weight:bold;
+        color:#333;
+        background:white;
+        padding:10px 18px;
+        border-radius:12px;
+        box-shadow:0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    #timer{
+        position:absolute;
+        top:15px;
+        right:20px;
+        font-size:24px;
+        font-weight:bold;
+        color:#333;
+        background:white;
+        padding:10px 18px;
+        border-radius:12px;
+        box-shadow:0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .balloon{
+        width:70px;
+        height:90px;
+        border-radius:50%;
+        position:absolute;
+        bottom:-120px;
+        cursor:pointer;
+        animation: floatUp linear forwards;
+    }
+
+    .balloon::after{
+        content:'';
+        width:2px;
+        height:40px;
+        background:#444;
+        position:absolute;
+        left:50%;
+        top:88px;
+    }
+
+    @keyframes floatUp{
+        from{
+            transform:translateY(0);
+        }
+        to{
+            transform:translateY(-120vh);
+        }
+    }
+
+    #gameOver{
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%, -50%);
+        background:white;
+        padding:35px;
+        border-radius:20px;
+        text-align:center;
+        box-shadow:0 6px 20px rgba(0,0,0,0.3);
+        display:none;
+        width:320px;
+    }
+
+    #gameOver h2{
+        color:#ff1493;
+        margin-bottom:15px;
+        font-size:34px;
+    }
+
+    #finalScore{
+        font-size:26px;
+        margin-bottom:20px;
+    }
+
+    button{
+        padding:12px 22px;
+        border:none;
+        border-radius:12px;
+        font-size:18px;
+        cursor:pointer;
+        margin:8px;
+        transition:0.3s;
+    }
+
+    #playAgain{
+        background:#28a745;
+        color:white;
+    }
+
+    #playAgain:hover{
+        background:#1f8a38;
+    }
+
+    #nextBtn{
+        background:#ff1493;
+        color:white;
+        display:none;
+    }
+
+    #nextBtn:hover{
+        background:#d80c78;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>🎈 Balloon Bursting Game 🎈</h1>
+
+<div id="scoreBoard">Score: 0</div>
+<div id="timer">Time: 30</div>
+
+<div id="gameOver">
+    <h2>Game Over!</h2>
+    <div id="finalScore">Your Score: 0</div>
+
+    <button id="playAgain">Play Again</button>
+    <button id="nextBtn">Next</button>
+</div>
+
+<script>
+
+let score = 0;
+let timeLeft = 30;
+let gameRunning = true;
+
+const scoreBoard = document.getElementById("scoreBoard");
+const timer = document.getElementById("timer");
+const gameOver = document.getElementById("gameOver");
+const finalScore = document.getElementById("finalScore");
+const playAgain = document.getElementById("playAgain");
+const nextBtn = document.getElementById("nextBtn");
+
+function randomColor(){
+    const colors = [
+        "#ff4d4d",
+        "#ff66b3",
+        "#66ccff",
+        "#66ff66",
+        "#ffcc00",
+        "#cc99ff",
+        "#ff884d"
+    ];
+
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+
+function createBalloon(){
+
+    if(!gameRunning) return;
+
+    const balloon = document.createElement("div");
+    balloon.classList.add("balloon");
+
+    balloon.style.background = randomColor();
+
+    balloon.style.left = Math.random() * (window.innerWidth - 80) + "px";
+
+    let duration = Math.random() * 3 + 4;
+    balloon.style.animationDuration = duration + "s";
+
+    balloon.addEventListener("click", () => {
+
+        if(!gameRunning) return;
+
+        score++;
+        scoreBoard.innerText = "Score: " + score;
+
+        balloon.remove();
+
+    });
+
+    document.body.appendChild(balloon);
+
+    setTimeout(() => {
+        balloon.remove();
+    }, duration * 1000);
+}
+
+let balloonInterval = setInterval(createBalloon, 700);
+
+let timerInterval = setInterval(() => {
+
+    timeLeft--;
+    timer.innerText = "Time: " + timeLeft;
+
+    if(timeLeft <= 0){
+
+        clearInterval(timerInterval);
+        clearInterval(balloonInterval);
+
+        gameRunning = false;
+
+        gameOver.style.display = "block";
+
+        finalScore.innerText = "Your Score: " + score;
+
+        nextBtn.style.display = "inline-block";
+    }
+
+}, 1000);
+
+playAgain.addEventListener("click", () => {
+    location.reload();
+});
+
+nextBtn.addEventListener("click", () => {
+    window.location.href = "message.html";
+});
+
+</script>
+
+</body>
+</html>

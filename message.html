@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Typing Message 💙</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(#0b1d3a, #1a2a6c);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial;
+    color: white;
+}
+
+/* Message box */
+#message {
+    font-size: 22px;
+    text-align: center;
+    width: 80%;
+    line-height: 1.6;
+}
+</style>
+</head>
+
+<body>
+
+<div id="message"></div>
+
+<script>
+const text = `Thank you yha tk explore karne ke liye..
+and for your precious time.
+
+Hopefully aapko aacha laga hoga
+and aapne aache se enjoy kiya hoga..!!
+
+Ok then,
+Sayonara ❤️‍🩹`;
+
+let i = 0;
+const speed = 40; // typing speed (lower = faster)
+const msgBox = document.getElementById("message");
+
+function typeWriter() {
+    if (i < text.length) {
+        msgBox.innerHTML += text.charAt(i) === "\n" ? "<br>" : text.charAt(i);
+        i++;
+        setTimeout(typeWriter, speed);
+    }
+}
+
+// start after 1.5 sec
+setTimeout(typeWriter, 1500);
+</script>
+
+</body>
+</html>
